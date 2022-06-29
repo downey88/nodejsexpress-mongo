@@ -9,3 +9,7 @@ STEP:
 3. Installing Product Manager on server
     sudo npm install -g pm2
 4. Create self-hosted runner on Settings > Actions > Runner
+5. Install svc.sh
+    sudo ./svc.sh install
+6. Start svc.sh
+    sudo ./svc.sh start
