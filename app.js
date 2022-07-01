@@ -7,3 +7,5 @@ app.get('/',(req,res)=>{
         mesg:'Hello Backend'
     })
 })
+
+app.listen(3000)
