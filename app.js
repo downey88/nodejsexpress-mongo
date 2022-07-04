@@ -4,7 +4,7 @@ const app = express()
 
 app.get('/',(req,res)=>{
     res.json({
-        message:'Backend NodeJS 04 July 2022 13:19'
+        message:'Backend NodeJS 04 July 2022 13:22'
     })
 })
 
