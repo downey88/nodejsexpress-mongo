@@ -29,5 +29,6 @@ jobs:
     # - run: npm test
     - run: |
         cd /home/ubuntu/backend/_work/nodejsbackend/nodejsbackend
+        cat app.js
         # sudo pm2 start app.js --name=backend
-        sudo pm2 restart backend
+        # sudo pm2 restart backend
