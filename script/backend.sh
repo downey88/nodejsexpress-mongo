@@ -1,6 +1,6 @@
 cd /home/ubuntu/backend/_work/nodejsbackend/nodejsbackend
 # npm test
-if[ "a" == "a" ]; 
+if[ true ]; 
 then
     echo "Benar"
     # sudo pm2 restart backend
