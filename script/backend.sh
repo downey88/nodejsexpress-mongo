@@ -4,6 +4,7 @@ if [ true ]; then
     echo "Benar"
     # sudo pm2 restart backend
 else
-    # sudo pm2 start app.js --name=backend
+   echo "Salah" 
+   # sudo pm2 start app.js --name=backend
 fi
 
