@@ -1,10 +1,14 @@
+#!/bin/bash
+
 cd /home/ubuntu/backend/_work/nodejsbackend/nodejsbackend
 # npm test
-if [ true ]; then
-    echo "Benar"
-    # sudo pm2 restart backend
+sudo pm2 describe backend > /dev/null
+RUNNING=$?
+
+if [ "${RUNNING}" -ne 0 ]; then
+  sudo pm2 start app.js --name=backend
 else
-   echo "Salah" 
-   # sudo pm2 start app.js --name=backend
-fi
+  sudo pm2 restart backend
+fi;
+
 
