@@ -1,6 +1,6 @@
 cd /home/ubuntu/backend/_work/nodejsbackend/nodejsbackend
 # npm test
-if[ true ]; then
+if [ true ]; then
     echo "Benar"
     # sudo pm2 restart backend
 else
