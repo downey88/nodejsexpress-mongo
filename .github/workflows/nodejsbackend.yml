@@ -49,7 +49,17 @@ jobs:
     
     if: github.event_name == 'push'
     steps:
-      - uses: actions/checkout@v3   
+      - uses: actions/checkout@v3  
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESSKEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESSKEY }}
+          aws-region: ${{ secrets.AWS_REGION_SIN }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1    
 
       - name: Deploy image
         run: |
@@ -60,3 +70,34 @@ jobs:
         with:
           cluster_name: ${{ secrets.CLUSTER_NAME }}
           args: rollout restart deployment/${{ secrets.DEPLOYMENT_NAME }} -n ${{ secrets.NAMESPACE }}
+
+
+
+
+
+
+deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESSKEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESSKEY }}
+          aws-region: ${{ secrets.AWS_REGION_SIN }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1     
+
+      - name: Restart K8 Deployment
+        id: kubectl
+        uses: ianbelcher/eks-kubectl-action@master
+        with:
+          cluster_name: ${{ secrets.CLUSTER_NAME_PRODUCTION }}
+          args: rollout restart deployment/${{ secrets.DEPLOYMENT_NAME_PRODUCTION }} -n ${{ secrets.NAMESPACE_PRODUCTION }}
