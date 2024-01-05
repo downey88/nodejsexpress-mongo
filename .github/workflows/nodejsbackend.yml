@@ -33,8 +33,12 @@ jobs:
           echo $ENV_FILE | tr " " "\n" >> .env
 
       - name: Build, tag, and push image
+        env:
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
         run: |
           echo "Building Phase..."
+          docker login -u $USERNAME -p $PASSWORD
           docker build -t express . --no-cache
           docker tag express donnytri/expressjs:latest
           docker push donnytri/expressjs:latest
