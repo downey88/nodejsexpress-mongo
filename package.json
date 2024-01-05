@@ -1,10 +1,11 @@
 {
-  "name": "nodejsbackend",
+  "name": "nodejsexpress-mongo",
   "version": "1.0.0",
   "description": "1.  Provision Ubuntu 22.04 Server and Installing Dependencies\r         sudo apt install nginx nodejs npm -y\r 2.  Create 2 Local Folder for Backend (NodeJS) and Frontend (React) \r         Clone nodejsbackend and reactfrontend\r 3.  Go to Backend Folder and install npm express\r         npm init -y && npm install express\r 4.  Create app.js\r 5.  Go to Frontend Folder and Install React App sample using npx (sample cloning from https://github.com/downey88/reactfrontend)\r         npx create-react-app .\r 6.  Build React \r         npm run build\r 7.  Create Github Action and choose NodeJS\r 8.  Create Runner Settings > Actions > Runners > New self-hosted runner, follow the instruction then install & start \r         sudo bash svc.sh install && sudo bash svc.sh start\r 9.  Install Production Process Manager on Ubuntu 22.04 Server\r         sudo npm install -g pm2\r 10. Go to backend folder on Ubuntu 22.04 Server and start app.js\r         sudo pm2 start app.js --name=backend\r 11. Configure root folder Nginx to frontend\r 12. Add restart command to Production Process Manager on Backend Workflows\r         sudo pm2 restart <name of Production Process Manager, backend as mention before>",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app",
+    "startDev": "nodemon app"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,11 @@
   "homepage": "https://github.com/downey88/nodejsbackend#readme",
   "keywords": [],
   "dependencies": {
-    "express": "^4.18.1"
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^8.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
   }
 }

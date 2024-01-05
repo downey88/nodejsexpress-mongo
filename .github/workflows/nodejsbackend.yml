@@ -1,29 +1,58 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+name: Expressjs CI / CD
 
-# name: Node.js CI
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
-# on:
-#   push:
-#     branches: [ "main" ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-# jobs:
-#   build:
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: echo "Testing Phase..."
 
-#     runs-on: self-hosted
+  build:
+    needs: test
+    runs-on: ubuntu-latest
 
-#     strategy:
-#       matrix:
-#         node-version: [16.x]
-#         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Configuration
+        env:
+          ENV_FILE: ${{ secrets.ENV }}
+        run: |
+          echo $ENV_FILE | tr " " "\n" >> .env
 
-#     steps:
-#     - uses: actions/checkout@v3
-#     - name: Use Node.js ${{ matrix.node-version }}
-#       uses: actions/setup-node@v3
-#       with:
-#         node-version: ${{ matrix.node-version }}
-#         cache: 'npm'
-#     - run: npm ci
-#     - run: npm run build --if-present
-#     - run: sudo bash script/backend.sh
+      - name: Build, tag, and push image
+        run: |
+          echo "Building Phase..."
+          docker build -t express . --no-cache
+          docker tag express donnytri/expressjs:latest
+          docker push donnytri/expressjs:latest
+          
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v3   
+
+      - name: Deploy image
+        run: |
+          echo "Deploying Phase..."
+      - name: Deploy K8 Deployment
+        id: kubectl
+        uses: ianbelcher/eks-kubectl-action@master
+        with:
+          cluster_name: ${{ secrets.CLUSTER_NAME }}
+          args: rollout restart deployment/${{ secrets.DEPLOYMENT_NAME }} -n ${{ secrets.NAMESPACE }}

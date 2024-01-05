@@ -1,11 +1,26 @@
-const express = require('express')
+require('dotenv').config();
 
-const app = express()
+const express = require('express');
+const path = require('path');
+//const connectDB = require('./dbConn');
+const app = express();
 
-app.get('/',(req,res)=>{
-    res.json({
-        message:'Backend NodeJS 19 July 2022 14:41'
-    })
-})
+//Added
+const mongoose = require('mongoose');
+mongoose.connect(process.env.DATABASE_URI, { useNewUrlParser: true});
+const db = mongoose.connection;
+db.on('error', (err) => console.log(err));
+db.once('open', () => console.log('Connected to Database'));
 
-app.listen(3000)
+//connectDB();
+
+app.use(express.json());
+
+const crude = require('./routes/crude');
+app.use('/', crude);
+
+// app.get('/',(req,res)=>{
+//     res.sendFile('./views/index.html', {root: __dirname});
+// })
+
+app.listen(80, () => console.log('Server Started...'));
