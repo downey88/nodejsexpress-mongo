@@ -19,7 +19,7 @@ router.get('/stresscpu', async (req, res) =>{
 router.get('/', async (req, res) =>{
     try{ 
         const book = await books.find();
-        res.json.parse(book);
+        res.json(book);
         // res.send("Testing CI/CD")
     }catch(err){
         res.statusCode(500).json({message: err.message});
