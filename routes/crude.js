@@ -45,19 +45,19 @@ router.post('/', async (req, res) =>{
 });
 
 // change document on mongoDB
-router.patch('/:id', (req, res) =>{
+router.patch('/:id', getBook, async(req, res) =>{
     if(req.body.title != null){
         res.book.title = req.body.title;
     }
     if(req.body.writer != null){
-        res.book.title = req.body.writer;
+        res.book.writer = req.body.writer;
     }
     if(req.body.year != null){
-        res.book.title = req.body.year;
+        res.book.year = req.body.year;
     }
 
     try{
-        const updateBook = awat.book.save();
+        const updateBook = await res.book.save();
         res.json(updateBook);
     }catch(err){
         res.status(400).json({message: err.message});
@@ -67,7 +67,7 @@ router.patch('/:id', (req, res) =>{
 // delete document from mongoDB
 router.delete('/:id', getBook, async (req, res) =>{
     try{
-        await res.book.remove();
+        await res.book.deleteOne();
         res.json({ message: 'Deleted Book'});
     }catch(err){
         res.status(500).json({message: err.message});
